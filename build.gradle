@@ -1,0 +1,13 @@
+plugins {
+    id 'idea'
+}
+
+idea {
+    project.ext {
+        languageLevel = 15
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
