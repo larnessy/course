@@ -1,6 +1,5 @@
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,29 +16,24 @@ public class Main {
                 new Weather(5, "region5", 7,
                         LocalDateTime.of(2023, 9, 24, 3, 0, 0)));
 
-        // first
-        System.out.println(list.stream().mapToDouble(Weather::getTemperature).average().orElse(0) + "\n");
+        // first (сделал бы по id, но так как пока привязки имени к id нет…)
+        Map<String, Double> averageTemperatureByRegion = WeatherProcessor.mapAverageTemperatureByRegion(list);
+        System.out.println("Average temperatures by region:\n" + averageTemperatureByRegion + "\n");
 
         // second
         int temperature = 3;
-        Set<String> regions = Functions.temperatureAboveThan(list, temperature);
-
+        Set<String> regions = WeatherProcessor.findRegionsWithTemperatureAboveThan(list, temperature);
         System.out.println("Temperature above than " + temperature + " in:\n" +
                 "{" + String.join(", ", regions) + "}\n");
 
         // third (no uniqueness required)
-        Map<Integer, List<Integer>> map1 = list.stream()
-                .collect(Collectors.groupingBy(Weather::getId,
-                        Collectors.mapping(Weather::getTemperature, Collectors.toList())));
-
-        System.out.println(map1 + "\n");
+        Map<Integer, List<Double>> temperaturesById = WeatherProcessor.mapTemperaturesById(list);
+        System.out.println("Temperatures by id:\n" + temperaturesById + "\n");
 
         // fourth
-        Map<Integer, List<Weather>> map2 = list.stream()
-                .collect(Collectors.groupingBy(Weather::getTemperature, Collectors.toList()));
-
-        System.out.println("{");
-        map2.forEach((key, value) -> {
+        Map<Double, List<Weather>> weatherByTemperature = WeatherProcessor.mapWeatherByTemperature(list);
+        System.out.println("Weather by temperature:\n" + "{");
+        weatherByTemperature.forEach((key, value) -> {
             System.out.println(key + " :");
             value.forEach(weather -> System.out.println("  " + weather));
         });

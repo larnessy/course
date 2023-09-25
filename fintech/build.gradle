@@ -23,8 +23,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     testCompileOnly 'org.projectlombok:lombok:1.18.28'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
-//  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-//  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 application {
@@ -37,14 +35,8 @@ jar {
     }
 }
 
-/* test {
-    useJUnitPlatform()
-} */
-
 task createJar(type: Jar) {
     manifest.from jar.manifest
     archiveFileName = 'fatJar.jar'
     from sourceSets.main.output
 }
-
-// tasks.build.dependsOn tasks.createJar

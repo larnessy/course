@@ -5,6 +5,6 @@ import java.time.LocalDateTime;
 public class Weather {
     int id;
     String nameOfRegion;
-    int temperature;
+    double temperature;
     LocalDateTime dateTime;
 }
