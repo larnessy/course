@@ -6,11 +6,11 @@ plugins {
 group 'com.course'
 version '1.0'
 
-sourceCompatibility = JavaVersion.VERSION_15
-targetCompatibility = JavaVersion.VERSION_15
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 compileJava.options.encoding = 'UTF-8'
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -35,7 +35,7 @@ jar {
     }
 }
 
-task createJar(type: Jar) {
+tasks.register('createJar', Jar) {
     manifest.from jar.manifest
     archiveFileName = 'fatJar.jar'
     from sourceSets.main.output
