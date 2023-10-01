@@ -1,4 +1,4 @@
-package com.course.service;
+package com.course.service.processor;
 
 import com.course.model.Weather;
 

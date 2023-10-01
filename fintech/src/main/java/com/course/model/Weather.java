@@ -1,9 +1,9 @@
-package com.course.entity;
+package com.course.model;
 
 import lombok.*;
+
 import java.time.LocalDateTime;
 
-// maybe must add Bean or other annotation
 @Value
 public class Weather {
     int id;

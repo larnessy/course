@@ -1,10 +1,11 @@
-package com.course.service;
+package com.course.service.processor;
 
 import com.course.model.Weather;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+// service, but not active
 public class WeatherProcessorImpl implements WeatherProcessor {
     @Override
     public Map<String, Double> mapAverageTemperatureByRegion(List<Weather> list) {
