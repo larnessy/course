@@ -1,8 +1,16 @@
-import java.time.LocalDateTime;
-import java.util.*;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+}
+
+
+/*
+
         List<Weather> list = Arrays.asList(
                 new Weather(1, "region1", 1, LocalDateTime.now()),
                 new Weather(2, "region2", 2, LocalDateTime.now()),
@@ -38,5 +46,5 @@ public class Main {
             value.forEach(weather -> System.out.println("  " + weather));
         });
         System.out.println("}");
-    }
-}
+
+ */
