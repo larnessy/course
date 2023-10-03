@@ -21,22 +21,25 @@ public class CRUDWeatherImpl implements CRUDWeather {
 
     @Override
     public void addCity(Weather weather) throws ThereIsAlreadySuchWeather {
-        if (MyRepository.list.stream().anyMatch(w -> w.getId() == weather.getId() &&
-                w.getNameOfRegion().equals(weather.getNameOfRegion()) &&
-                w.getDateTime().equals(weather.getDateTime())))
+        boolean isThereSuchWeatherMaybeWithOtherTemperature = MyRepository.list.stream().
+                anyMatch(w -> w.getId() == weather.getId() &&
+                        w.getNameOfRegion().equals(weather.getNameOfRegion()) &&
+                        w.getDateTime().equals(weather.getDateTime()));
+        if (isThereSuchWeatherMaybeWithOtherTemperature) {
             throw new ThereIsAlreadySuchWeather("There is already such weather (maybe with other temperature)");
+        }
         MyRepository.list.add(weather);
     }
 
     @Override
     public void saveOrUpdate(Weather weather) throws ThereIsAlreadySuchWeather {
-        if (MyRepository.list.contains(weather))
+        if (MyRepository.list.contains(weather)) {
             throw new ThereIsAlreadySuchWeather("There is already such weather");
+        }
         Optional<Weather> optional = MyRepository.list.stream().
                 filter(w -> w.getId() == weather.getId() &&
                         w.getNameOfRegion().equals(weather.getNameOfRegion()) &&
-                        w.getDateTime().equals(weather.getDateTime())).
-                findFirst();
+                        w.getDateTime().equals(weather.getDateTime())).findFirst();
         optional.ifPresent(MyRepository.list::remove);
         MyRepository.list.add(weather);
     }
@@ -45,7 +48,8 @@ public class CRUDWeatherImpl implements CRUDWeather {
     public void deleteByCity(int id) throws ThereIsNoCityWithThisId {
         int size = MyRepository.list.size();
         MyRepository.list.removeIf(w -> w.getId() == id);
-        if (size == MyRepository.list.size())
+        if (size == MyRepository.list.size()) {
             throw new ThereIsNoCityWithThisId("There is no city with this id in the database");
+        }
     }
 }

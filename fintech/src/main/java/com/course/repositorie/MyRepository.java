@@ -3,14 +3,14 @@ package com.course.repositorie;
 import com.course.model.Weather;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 // in case we need to use two or more controllers working with list (в DI не вижу смысла — только кода больше будет)
 public class MyRepository {
-    // data for test (new ArrayList<>(Arrays.asList… — не эффективно, зато лаконично)
-    public static final List<Weather> list = new ArrayList<>(Arrays.asList(
+    // data for test (new CopyOnWriteArrayList<>(Arrays.asList… — не эффективно, зато лаконично)
+    public static final List<Weather> list = new CopyOnWriteArrayList<>(Arrays.asList(
             new Weather(1, "region1", 1, LocalDateTime.now()),
             new Weather(2, "region2", 2, LocalDateTime.now()),
             new Weather(3, "region3", 3, LocalDateTime.now()),

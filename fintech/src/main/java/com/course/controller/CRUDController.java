@@ -1,7 +1,5 @@
 package com.course.controller;
 
-import com.course.exception.myException.ThereIsAlreadySuchWeather;
-import com.course.exception.myException.ThereIsNoCityWithThisId;
 import com.course.model.Weather;
 import com.course.service.crud.CRUDWeather;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,19 +26,19 @@ public class CRUDController {
 
     @Operation(summary = "Add city by adding weather with this city")
     @PostMapping("/")
-    public void addCity(@RequestBody Weather weather) throws ThereIsAlreadySuchWeather {
+    public void addCity(@RequestBody Weather weather) {
         crudWeather.addCity(weather);
     }
 
     @Operation(summary = "Save this city or update data by manipulate weather data")
     @PutMapping("/")
-    public void saveOrUpdate(@RequestBody Weather weather) throws ThereIsAlreadySuchWeather {
+    public void saveOrUpdate(@RequestBody Weather weather) {
         crudWeather.saveOrUpdate(weather);
     }
 
     @Operation(summary = "Delete all weathers by id of city")
     @DeleteMapping("/{city}")
-    public void deleteByCity(@PathVariable int city) throws ThereIsNoCityWithThisId {
+    public void deleteByCity(@PathVariable int city) {
         crudWeather.deleteByCity(city);
     }
 }
