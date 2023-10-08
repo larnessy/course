@@ -1,8 +1,7 @@
 package com.course.exception.handler;
 
 import com.course.exception.data.AdditionalExceptionData;
-import com.course.exception.myException.ThereIsAlreadySuchWeather;
-import com.course.exception.myException.ThereIsNoCityWithThisId;
+import com.course.exception.myException.MyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,29 +13,19 @@ import java.util.NoSuchElementException;
 public class WeatherGlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<AdditionalExceptionData> handleException(NoSuchElementException exception) {
-        AdditionalExceptionData data = new AdditionalExceptionData();
-        data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.CONFLICT);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new AdditionalExceptionData(exception.getMessage()));
     }
 
-    @ExceptionHandler(ThereIsAlreadySuchWeather.class)
-    public ResponseEntity<AdditionalExceptionData> handleException(ThereIsAlreadySuchWeather exception) {
-        AdditionalExceptionData data = new AdditionalExceptionData();
-        data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(ThereIsNoCityWithThisId.class)
-    public ResponseEntity<AdditionalExceptionData> handleException(ThereIsNoCityWithThisId exception) {
-        AdditionalExceptionData data = new AdditionalExceptionData();
-        data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.CONFLICT);
+    @ExceptionHandler(MyException.class)
+    public ResponseEntity<AdditionalExceptionData> handleException(MyException exception) {
+        return ResponseEntity.status(exception.getHttpStatus())
+                .body(new AdditionalExceptionData(exception.getMessage()));
     }
 
     @ExceptionHandler
-    public ResponseEntity<AdditionalExceptionData> handleException(Exception exception) {
-        AdditionalExceptionData data = new AdditionalExceptionData();
-        data.setInfo(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<AdditionalExceptionData> handleException(Throwable exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new AdditionalExceptionData(exception.getMessage()));
     }
 }

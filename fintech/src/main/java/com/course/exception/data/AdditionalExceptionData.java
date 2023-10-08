@@ -7,4 +7,8 @@ import lombok.Setter;
 @Setter
 public class AdditionalExceptionData {
     private String info;
+
+    public AdditionalExceptionData(String info) {
+        this.info = info;
+    }
 }

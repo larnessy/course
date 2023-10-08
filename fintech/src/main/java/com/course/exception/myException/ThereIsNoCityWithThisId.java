@@ -1,7 +1,9 @@
 package com.course.exception.myException;
 
-public class ThereIsNoCityWithThisId extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class ThereIsNoCityWithThisId extends MyException {
     public ThereIsNoCityWithThisId(String message) {
-        super(message);
+        super(HttpStatus.CONFLICT, message);
     }
 }

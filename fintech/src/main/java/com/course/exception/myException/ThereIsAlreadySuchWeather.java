@@ -1,7 +1,9 @@
 package com.course.exception.myException;
 
-public class ThereIsAlreadySuchWeather extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class ThereIsAlreadySuchWeather extends MyException {
     public ThereIsAlreadySuchWeather(String message) {
-        super(message);
+        super(HttpStatus.CONFLICT, message);
     }
 }
