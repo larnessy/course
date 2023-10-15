@@ -1,6 +1,6 @@
 package com.course.exception.handler;
 
-import com.course.exception.MyApiException;
+import com.course.exception.myApiException.MyApiException;
 import com.course.exception.data.AdditionalExceptionData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
