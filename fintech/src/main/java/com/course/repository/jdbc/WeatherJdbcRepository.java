@@ -66,11 +66,28 @@ public class WeatherJdbcRepository {
         params.put("weatherConditionId", weatherEntity.getWeatherCondition().getId());
         params.put("temperature", weatherEntity.getTemperature());
         params.put("dateTime", weatherEntity.getDateTime());
+
         namedParameterJdbcTemplate.update(sql, params);
     }
 
     public void deleteById(int id) {
         String sql = "DELETE FROM weather WHERE id = :id";
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+        namedParameterJdbcTemplate.update(sql, params);
+    }
+
+    // without building an index for city_id because I think this operation will be called rarely
+    public void deleteByCityId(int id) {
+        String sql = "DELETE FROM weather WHERE city_id = :id";
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+        namedParameterJdbcTemplate.update(sql, params);
+    }
+
+    // without building an index for weather_condition_id because I think this operation will be called rarely
+    public void deleteByWeatherConditionId(int id) {
+        String sql = "DELETE FROM weather WHERE weather_condition_id = :id";
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
         namedParameterJdbcTemplate.update(sql, params);

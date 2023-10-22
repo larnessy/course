@@ -46,6 +46,15 @@ public class WeatherConditionJdbcRepository {
         return weatherConditions.isEmpty() ? null : weatherConditions.get(0);
     }
 
+    public WeatherCondition findByName(String name) {
+        String sql = "SELECT * FROM weather_condition WHERE name = :name";
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        List<WeatherCondition> weatherConditions =
+                namedParameterJdbcTemplate.query(sql, params, new WeatherConditionRowMapper());
+        return weatherConditions.isEmpty() ? null : weatherConditions.get(0);
+    }
+
     public void update(WeatherCondition weatherCondition) {
         String sql = "UPDATE weather_condition SET name = :name WHERE id = :id";
         Map<String, Object> params = new HashMap<>();
@@ -60,4 +69,5 @@ public class WeatherConditionJdbcRepository {
         params.put("id", id);
         namedParameterJdbcTemplate.update(sql, params);
     }
+
 }

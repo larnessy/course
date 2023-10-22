@@ -19,10 +19,13 @@
             </column>
 
             <column name="name" type="VARCHAR(200)" remarks="Name of weather condition">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
 
+        <createIndex tableName="weather_condition" indexName="idx_weather_condition_name">
+            <column name="name"/>
+        </createIndex>
     </changeSet>
 
     <changeSet id="addWeatherConditions" author="Vladislav">

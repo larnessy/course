@@ -44,7 +44,7 @@ public class Main {
 
             jpaWeatherConditionService.save(weatherCondition);
             assert weatherCondition.equals(jpaWeatherConditionService.getById(weatherCondition.getId()));
-            jpaWeatherConditionService.update(new WeatherCondition(2, "Clear"));
+            jpaWeatherConditionService.update(new WeatherCondition(3, "Clear"));
             jpaWeatherConditionService.deleteById(1);
 
             // JpaWeatherService
@@ -56,6 +56,7 @@ public class Main {
             assert weatherEntity1.equals(jpaWeatherService.getById(weatherEntity1.getId()));
             jpaWeatherService.update(new WeatherEntity(2, city, weatherCondition, 6, LocalDateTime.now()));
             jpaWeatherService.deleteById(1);
+
 
             // JdbcCityService
             City city2 = new City("Tomsk");
@@ -70,7 +71,7 @@ public class Main {
 
             jdbcWeatherConditionService.save(weatherCondition2);
             assert weatherCondition2.equals(jdbcWeatherConditionService.getById(weatherCondition2.getId()));
-            jdbcWeatherConditionService.update(new WeatherCondition(4, "Sunny"));
+            jdbcWeatherConditionService.update(new WeatherCondition(4, "Haboob"));
             jdbcWeatherConditionService.deleteById(2);
 
             // JdbcWeatherService
@@ -85,6 +86,11 @@ public class Main {
             jdbcWeatherService.update(new WeatherEntity(4,
                     city2, weatherCondition2, 8, LocalDateTime.now()));
             jdbcWeatherService.deleteById(3);
+
+            // cascade
+
+//            jdbcCityService.deleteById(6);
+//            jpaCityService.deleteById(7);
         };
     }
 }

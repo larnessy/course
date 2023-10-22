@@ -46,6 +46,14 @@ public class CityJdbcRepository {
         return cities.isEmpty() ? null : cities.get(0);
     }
 
+    public City findByName(String name) {
+        String sql = "SELECT * FROM city WHERE name = :name";
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        List<City> cities = namedParameterJdbcTemplate.query(sql, params, new CityRowMapper());
+        return cities.isEmpty() ? null : cities.get(0);
+    }
+
     public void update(City city) {
         String sql = "UPDATE city SET name = :name WHERE id = :id";
         Map<String, Object> params = new HashMap<>();
@@ -60,4 +68,5 @@ public class CityJdbcRepository {
         params.put("id", id);
         namedParameterJdbcTemplate.update(sql, params);
     }
+
 }

@@ -42,6 +42,11 @@
         <addForeignKeyConstraint baseTableName="weather" baseColumnNames="weather_condition_id"
                                  constraintName="FK_weather_weather_condition"
                                  referencedTableName="weather_condition" referencedColumnNames="id" />
+
+        <createIndex tableName="weather" indexName="idx_weather_temperature_date_time">
+            <column name="temperature"/>
+            <column name="date_time"/>
+        </createIndex>
     </changeSet>
 
 </databaseChangeLog>

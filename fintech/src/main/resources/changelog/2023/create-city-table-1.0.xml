@@ -20,10 +20,13 @@
             </column>
 
             <column name="name" type="VARCHAR(200)" remarks="Name of city">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
 
+        <createIndex tableName="city" indexName="idx_city_name">
+            <column name="name"/>
+        </createIndex>
     </changeSet>
 
     <changeSet id="addCities" author="Vladislav">

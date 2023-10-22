@@ -1,23 +1,50 @@
 package com.course.service.crud.db.jdbc;
 
+import com.course.exception.myException.db.UnknownProblemWithDb;
 import com.course.model.entity.WeatherCondition;
 import com.course.repository.jdbc.WeatherConditionJdbcRepository;
+import com.course.repository.jdbc.WeatherJdbcRepository;
 import com.course.service.crud.db.contract.WeatherConditionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
 public class JdbcWeatherConditionService implements WeatherConditionService {
+    private final TransactionTemplate transactionTemplate;
+    private final WeatherConditionJdbcRepository weatherConditionJdbcRepository;
+    private final WeatherJdbcRepository weatherJdbcRepository;
+
     @Autowired
-    WeatherConditionJdbcRepository weatherConditionJdbcRepository;
+    public JdbcWeatherConditionService(WeatherConditionJdbcRepository weatherConditionJdbcRepository,
+                                       TransactionTemplate transactionTemplate,
+                                       WeatherJdbcRepository weatherJdbcRepository) {
+        this.weatherConditionJdbcRepository = weatherConditionJdbcRepository;
+        this.transactionTemplate = transactionTemplate;
+        this.weatherJdbcRepository = weatherJdbcRepository;
+    }
 
     @Override
     public void save(WeatherCondition weatherCondition) {
-        if (weatherCondition.getId() != 0) {
-            throw new IllegalArgumentException("The id must not be set for a new WeatherCondition");
-        }
+        transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+        transactionTemplate.execute(status -> {
+            try {
+                if (weatherCondition.getId() != 0) {
+                    throw new IllegalArgumentException("The id must not be set for a new weatherCondition");
+                }
 
-        weatherConditionJdbcRepository.save(weatherCondition);
+                weatherConditionJdbcRepository.save(weatherCondition);
+
+            } catch (DataAccessException ex) {
+                status.setRollbackOnly();
+                throw new IllegalArgumentException("A weatherCondition with the same "
+                        + "name have been already in the database");
+            }
+            return null;
+        });
     }
 
     @Override
@@ -27,11 +54,34 @@ public class JdbcWeatherConditionService implements WeatherConditionService {
 
     @Override
     public void update(WeatherCondition weatherCondition) {
-        weatherConditionJdbcRepository.update(weatherCondition);
+        transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+        transactionTemplate.execute(status -> {
+            try {
+                weatherConditionJdbcRepository.update(weatherCondition);
+            } catch (DataAccessException ex) {
+                status.setRollbackOnly();
+                throw new UnknownProblemWithDb("Failed to update weatherCondition in database");
+            }
+            return null;
+        });
     }
 
     @Override
     public void deleteById(int id) {
-        weatherConditionJdbcRepository.deleteById(id);
+        transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_SERIALIZABLE);
+        transactionTemplate.execute(status -> {
+            try {
+                weatherJdbcRepository.deleteByWeatherConditionId(id);
+
+                weatherConditionJdbcRepository.deleteById(id);
+
+            } catch (DuplicateKeyException e) {
+                status.setRollbackOnly();
+            } catch (DataAccessException ex) {
+                status.setRollbackOnly();
+                throw new UnknownProblemWithDb("Failed to delete weatherCondition from database");
+            }
+            return null;
+        });
     }
 }

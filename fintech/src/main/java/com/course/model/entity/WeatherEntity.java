@@ -17,12 +17,11 @@ public class WeatherEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // добавить каскад?
-    @OneToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "weather_condition_id")
     private WeatherCondition weatherCondition;
 
