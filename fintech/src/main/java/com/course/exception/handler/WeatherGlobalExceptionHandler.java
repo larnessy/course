@@ -31,10 +31,9 @@ public class WeatherGlobalExceptionHandler {
                 .body(new AdditionalExceptionData(exception.getMessage()));
     }
 
-    // здесь HttpStatus.BAD_REQUEST, вероятно, стоит переосмыслить…
     @ExceptionHandler
     public ResponseEntity<AdditionalExceptionData> handleException(Throwable exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new AdditionalExceptionData(exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new AdditionalExceptionData("Unknown server error"));
     }
 }

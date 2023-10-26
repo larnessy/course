@@ -12,6 +12,8 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.dao.DuplicateKeyException;
 
+import java.util.Optional;
+
 
 @Service
 public class JdbcCityService implements CityService {
@@ -49,7 +51,7 @@ public class JdbcCityService implements CityService {
     }
 
     @Override
-    public City getById(int id) {
+    public Optional<City> getById(int id) {
         return cityJdbcRepository.getById(id);
     }
 

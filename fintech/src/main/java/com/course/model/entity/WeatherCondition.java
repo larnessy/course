@@ -1,6 +1,7 @@
 package com.course.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class WeatherCondition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull
     private String name;
 
     @OneToMany(mappedBy = "weatherCondition", cascade = CascadeType.REMOVE)

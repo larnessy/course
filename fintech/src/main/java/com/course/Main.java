@@ -35,7 +35,7 @@ public class Main {
             City city = new City("Dallas");
 
             jpaCityService.save(city);
-            assert city.equals(jpaCityService.getById(city.getId()));
+            assert city.equals(jpaCityService.getById(city.getId()).orElse(null));
             jpaCityService.update(new City(3, "Atlanta"));
             jpaCityService.deleteById(1);
 
@@ -43,7 +43,8 @@ public class Main {
             WeatherCondition weatherCondition = new WeatherCondition("Foggy");
 
             jpaWeatherConditionService.save(weatherCondition);
-            assert weatherCondition.equals(jpaWeatherConditionService.getById(weatherCondition.getId()));
+            assert weatherCondition.equals(jpaWeatherConditionService
+                    .getById(weatherCondition.getId()).orElse(null));
             jpaWeatherConditionService.update(new WeatherCondition(3, "Clear"));
             jpaWeatherConditionService.deleteById(1);
 
@@ -53,7 +54,7 @@ public class Main {
 
             jpaWeatherService.save(weatherEntity1);
             jpaWeatherService.save(weatherEntity2);
-            assert weatherEntity1.equals(jpaWeatherService.getById(weatherEntity1.getId()));
+            assert weatherEntity1.equals(jpaWeatherService.getById(weatherEntity1.getId()).orElse(null));
             jpaWeatherService.update(new WeatherEntity(2, city, weatherCondition, 6, LocalDateTime.now()));
             jpaWeatherService.deleteById(1);
 
@@ -62,7 +63,7 @@ public class Main {
             City city2 = new City("Tomsk");
 
             jdbcCityService.save(city2);
-            assert city.equals(jdbcCityService.getById(city2.getId()));
+            assert city.equals(jdbcCityService.getById(city2.getId()).orElse(null));
             jdbcCityService.update(new City(4, "Paris"));
             jdbcCityService.deleteById(2);
 
@@ -70,7 +71,8 @@ public class Main {
             WeatherCondition weatherCondition2 = new WeatherCondition("Rain");
 
             jdbcWeatherConditionService.save(weatherCondition2);
-            assert weatherCondition2.equals(jdbcWeatherConditionService.getById(weatherCondition2.getId()));
+            assert weatherCondition2.equals(jdbcWeatherConditionService
+                    .getById(weatherCondition2.getId()).orElse(null));
             jdbcWeatherConditionService.update(new WeatherCondition(4, "Haboob"));
             jdbcWeatherConditionService.deleteById(2);
 
@@ -82,7 +84,8 @@ public class Main {
 
             jdbcWeatherService.save(weatherEntity3);
             jdbcWeatherService.save(weatherEntity4);
-            assert weatherEntity3.equals(jdbcWeatherService.getById(weatherEntity3.getId()));
+            assert weatherEntity3.equals(jdbcWeatherService
+                    .getById(weatherEntity3.getId()).orElse(null));
             jdbcWeatherService.update(new WeatherEntity(4,
                     city2, weatherCondition2, 8, LocalDateTime.now()));
             jdbcWeatherService.deleteById(3);

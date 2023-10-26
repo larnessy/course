@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.Optional;
+
 @Service
 public class JdbcWeatherConditionService implements WeatherConditionService {
     private final TransactionTemplate transactionTemplate;
@@ -48,7 +50,7 @@ public class JdbcWeatherConditionService implements WeatherConditionService {
     }
 
     @Override
-    public WeatherCondition getById(int id) {
+    public Optional<WeatherCondition> getById(int id) {
         return weatherConditionJdbcRepository.getById(id);
     }
 

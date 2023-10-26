@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class WeatherJdbcRepository {
@@ -42,7 +43,7 @@ public class WeatherJdbcRepository {
         weatherEntity.setId(keyHolder.getKey() == null ? 0 : keyHolder.getKey().intValue());
     }
 
-    public WeatherEntity getById(int id) {
+    public Optional<WeatherEntity> getById(int id) {
         String sql = "SELECT w.id, w.temperature, w.date_time, c.id AS city_id, c.name AS city_name, " +
                 "wc.id AS weather_condition_id, wc.name AS weather_condition_name " +
                 "FROM weather w " +
@@ -52,7 +53,7 @@ public class WeatherJdbcRepository {
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
         List<WeatherEntity> weatherEntities = namedParameterJdbcTemplate.query(sql, params, new WeatherEntityRowMapper());
-        return weatherEntities.isEmpty() ? null : weatherEntities.get(0);
+        return weatherEntities.isEmpty() ? Optional.empty() : Optional.ofNullable(weatherEntities.get(0));
     }
 
     public void update(WeatherEntity weatherEntity) {

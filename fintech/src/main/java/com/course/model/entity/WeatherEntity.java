@@ -1,6 +1,7 @@
 package com.course.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,15 +20,19 @@ public class WeatherEntity {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "city_id")
+    @NotNull
     private City city;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "weather_condition_id")
+    @NotNull
     private WeatherCondition weatherCondition;
 
+    @NotNull
     private double temperature;
 
     @Column(name = "date_time")
+    @NotNull
     private LocalDateTime dateTime;
 
     public WeatherEntity(City city, WeatherCondition weatherCondition, double temperature, LocalDateTime dateTime) {

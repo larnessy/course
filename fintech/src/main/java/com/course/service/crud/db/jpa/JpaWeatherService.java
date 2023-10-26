@@ -18,6 +18,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.Optional;
+
 @Service
 public class JpaWeatherService implements WeatherService {
 
@@ -48,10 +50,6 @@ public class JpaWeatherService implements WeatherService {
             City city = weatherEntity.getCity();
             WeatherCondition weatherCondition = weatherEntity.getWeatherCondition();
 
-            if (city == null || weatherCondition == null) {
-                throw new IllegalArgumentException("City and weatherCondition must not be null");
-            }
-
             if (city.getId() == 0) {
                 City cityFromDb = cityJpaRepository.findByName(city.getName());
                 city = cityFromDb == null ? city : cityFromDb;
@@ -81,8 +79,8 @@ public class JpaWeatherService implements WeatherService {
     }
 
     @Override
-    public WeatherEntity getById(int id) {
-        return weatherJpaRepository.findById(id).orElse(null);
+    public Optional<WeatherEntity> getById(int id) {
+        return weatherJpaRepository.findById(id);
     }
 
     @Override
@@ -91,10 +89,6 @@ public class JpaWeatherService implements WeatherService {
         try {
             City city = weatherEntity.getCity();
             WeatherCondition weatherCondition = weatherEntity.getWeatherCondition();
-
-            if (city == null || weatherCondition == null) {
-                throw new IllegalArgumentException("City and weatherCondition must not be null");
-            }
 
             if (city.getId() == 0) {
                 City cityFromDb = cityJpaRepository.findByName(city.getName());

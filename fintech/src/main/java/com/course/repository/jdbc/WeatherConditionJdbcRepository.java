@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class WeatherConditionJdbcRepository {
@@ -37,22 +38,22 @@ public class WeatherConditionJdbcRepository {
         weatherCondition.setId(keyHolder.getKey() == null ? 0 : keyHolder.getKey().intValue());
     }
 
-    public WeatherCondition getById(int id) {
+    public Optional<WeatherCondition> getById(int id) {
         String sql = "SELECT * FROM weather_condition WHERE id = :id";
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
         List<WeatherCondition> weatherConditions =
                 namedParameterJdbcTemplate.query(sql, params, new WeatherConditionRowMapper());
-        return weatherConditions.isEmpty() ? null : weatherConditions.get(0);
+        return weatherConditions.isEmpty() ? Optional.empty() : Optional.ofNullable(weatherConditions.get(0));
     }
 
-    public WeatherCondition findByName(String name) {
+    public Optional<WeatherCondition> findByName(String name) {
         String sql = "SELECT * FROM weather_condition WHERE name = :name";
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         List<WeatherCondition> weatherConditions =
                 namedParameterJdbcTemplate.query(sql, params, new WeatherConditionRowMapper());
-        return weatherConditions.isEmpty() ? null : weatherConditions.get(0);
+        return weatherConditions.isEmpty() ? Optional.empty() : Optional.ofNullable(weatherConditions.get(0));
     }
 
     public void update(WeatherCondition weatherCondition) {

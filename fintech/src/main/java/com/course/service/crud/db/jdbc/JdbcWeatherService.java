@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.Optional;
+
 @Service
 public class JdbcWeatherService implements WeatherService {
 
@@ -46,12 +48,8 @@ public class JdbcWeatherService implements WeatherService {
                 City city = weatherEntity.getCity();
                 WeatherCondition weatherCondition = weatherEntity.getWeatherCondition();
 
-                if (city == null || weatherCondition == null) {
-                    throw new IllegalArgumentException("City and weatherCondition must not be null");
-                }
-
                 if (city.getId() == 0) {
-                    City cityFromDb = cityJdbcRepository.findByName(city.getName());
+                    City cityFromDb = cityJdbcRepository.findByName(city.getName()).orElse(null);
 
                     if (cityFromDb == null) {
                         cityJdbcRepository.save(city);
@@ -62,7 +60,7 @@ public class JdbcWeatherService implements WeatherService {
 
                 if (weatherCondition.getId() == 0) {
                     WeatherCondition weatherConditionFromDb = weatherConditionJdbcRepository.
-                            findByName(weatherCondition.getName());
+                            findByName(weatherCondition.getName()).orElse(null);
 
                     if (weatherConditionFromDb == null) {
                         weatherConditionJdbcRepository.save(weatherCondition);
@@ -82,7 +80,7 @@ public class JdbcWeatherService implements WeatherService {
     }
 
     @Override
-    public WeatherEntity getById(int id) {
+    public Optional<WeatherEntity> getById(int id) {
         return weatherJdbcRepository.getById(id);
     }
 
@@ -94,12 +92,8 @@ public class JdbcWeatherService implements WeatherService {
                 City city = weatherEntity.getCity();
                 WeatherCondition weatherCondition = weatherEntity.getWeatherCondition();
 
-                if (city == null || weatherCondition == null) {
-                    throw new IllegalArgumentException("City and weatherCondition must not be null");
-                }
-
                 if (city.getId() == 0) {
-                    City cityFromDb = cityJdbcRepository.findByName(city.getName());
+                    City cityFromDb = cityJdbcRepository.findByName(city.getName()).orElse(null);
 
                     if (cityFromDb == null) {
                         cityJdbcRepository.save(city);
@@ -110,7 +104,7 @@ public class JdbcWeatherService implements WeatherService {
 
                 if (weatherCondition.getId() == 0) {
                     WeatherCondition weatherConditionFromDb = weatherConditionJdbcRepository.
-                            findByName(weatherCondition.getName());
+                            findByName(weatherCondition.getName()).orElse(null);
 
                     if (weatherConditionFromDb == null) {
                         weatherConditionJdbcRepository.save(weatherCondition);

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.Optional;
+
 @Service
 public class JpaCityService implements CityService {
 
@@ -38,8 +40,8 @@ public class JpaCityService implements CityService {
     }
 
     @Override
-    public City getById(int id) {
-        return cityJpaRepository.findById(id).orElse(null);
+    public Optional<City> getById(int id) {
+        return cityJpaRepository.findById(id);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)

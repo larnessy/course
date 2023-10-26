@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class CityJdbcRepository {
@@ -38,20 +39,20 @@ public class CityJdbcRepository {
         city.setId(keyHolder.getKey() == null ? 0 : keyHolder.getKey().intValue());
     }
 
-    public City getById(int id) {
+    public Optional<City> getById(int id) {
         String sql = "SELECT * FROM city WHERE id = :id";
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
         List<City> cities = namedParameterJdbcTemplate.query(sql, params, new CityRowMapper());
-        return cities.isEmpty() ? null : cities.get(0);
+        return cities.isEmpty() ? Optional.empty() : Optional.ofNullable(cities.get(0));
     }
 
-    public City findByName(String name) {
+    public Optional<City> findByName(String name) {
         String sql = "SELECT * FROM city WHERE name = :name";
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         List<City> cities = namedParameterJdbcTemplate.query(sql, params, new CityRowMapper());
-        return cities.isEmpty() ? null : cities.get(0);
+        return cities.isEmpty() ? Optional.empty() : Optional.ofNullable(cities.get(0));
     }
 
     public void update(City city) {

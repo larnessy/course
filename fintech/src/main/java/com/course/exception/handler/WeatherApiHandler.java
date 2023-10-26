@@ -1,6 +1,6 @@
 package com.course.exception.handler;
 
-import com.course.exception.myApiException.MyApiException;
+import com.course.exception.myApiException.MainExceptionForExternalApi;
 import com.course.exception.data.AdditionalExceptionData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class WeatherApiHandler {
-    @ExceptionHandler(MyApiException.class)
-    public ResponseEntity<AdditionalExceptionData> handleException(MyApiException exception) {
+    @ExceptionHandler(MainExceptionForExternalApi.class)
+    public ResponseEntity<AdditionalExceptionData> handleException(MainExceptionForExternalApi exception) {
         ResponseEntity<AdditionalExceptionData> response;
         // errorCodes в этом API довольно мало, так что, думается мне, такой способ оптимален
         switch (exception.getErrorCode()) {

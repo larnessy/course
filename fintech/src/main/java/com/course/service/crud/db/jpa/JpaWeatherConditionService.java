@@ -12,6 +12,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.Optional;
+
 @Service
 public class JpaWeatherConditionService implements WeatherConditionService {
 
@@ -40,8 +42,8 @@ public class JpaWeatherConditionService implements WeatherConditionService {
     }
 
     @Override
-    public WeatherCondition getById(int id) {
-        return weatherConditionJpaRepository.findById(id).orElse(null);
+    public Optional<WeatherCondition> getById(int id) {
+        return weatherConditionJpaRepository.findById(id);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
