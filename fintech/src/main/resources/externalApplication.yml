@@ -1,0 +1,12 @@
+# for test other format
+
+resilience4j:
+  rate-limiter:
+    configs:
+      default:
+        limitForPeriod: 1000000
+        limitRefreshPeriod: 28d
+        timeoutDuration: 1s
+    instances:
+      apiLimiter:
+        baseConfig: default

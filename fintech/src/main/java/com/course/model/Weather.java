@@ -1,4 +1,7 @@
+package com.course.model;
+
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Value
