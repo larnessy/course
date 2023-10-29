@@ -49,4 +49,42 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="addWeathers" author="Vladislav">
+        <preConditions onFail="MARK_RAN" onError="WARN">
+            <tableExists tableName="weather"/>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM weather</sqlCheck>
+        </preConditions>
+
+        <insert tableName="weather">
+            <column name="city_id" valueNumeric="2"/>
+            <column name="weather_condition_id" valueNumeric="3"/>
+            <column name="temperature" valueNumeric="1"/>
+            <column name="date_time" value="2000-01-01 00:00:00"/>
+        </insert>
+        <insert tableName="weather">
+            <column name="city_id" valueNumeric="2"/>
+            <column name="weather_condition_id" valueNumeric="2"/>
+            <column name="temperature" valueNumeric="2"/>
+            <column name="date_time" value="2000-02-02 00:00:00"/>
+        </insert>
+        <insert tableName="weather">
+            <column name="city_id" valueNumeric="3"/>
+            <column name="weather_condition_id" valueNumeric="3"/>
+            <column name="temperature" valueNumeric="3"/>
+            <column name="date_time" value="2000-03-03 00:00:00"/>
+        </insert>
+        <insert tableName="weather">
+            <column name="city_id" valueNumeric="4"/>
+            <column name="weather_condition_id" valueNumeric="4"/>
+            <column name="temperature" valueNumeric="4"/>
+            <column name="date_time" value="2000-04-04 00:00:00"/>
+        </insert>
+        <insert tableName="weather">
+            <column name="city_id" valueNumeric="5"/>
+            <column name="weather_condition_id" valueNumeric="5"/>
+            <column name="temperature" valueNumeric="5"/>
+            <column name="date_time" value="2000-05-05 00:00:00"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

@@ -14,6 +14,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class WeatherCondition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,6 +13,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
