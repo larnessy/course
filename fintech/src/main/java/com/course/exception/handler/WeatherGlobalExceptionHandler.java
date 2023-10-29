@@ -23,6 +23,7 @@ public class WeatherGlobalExceptionHandler {
                 .body(new AdditionalExceptionData(exception.getMessage()));
     }
 
+    // здесь HttpStatus.BAD_REQUEST, вероятно, стоит переосмыслить…
     @ExceptionHandler
     public ResponseEntity<AdditionalExceptionData> handleException(Throwable exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

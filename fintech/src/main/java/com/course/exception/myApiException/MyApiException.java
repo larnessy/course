@@ -1,4 +1,4 @@
-package com.course.exception;
+package com.course.exception.myApiException;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.course.service.myRestClient;
 
-import com.course.exception.MyApiException;
+import com.course.exception.myApiException.MyApiException;
 import com.course.model.weatherApi.ApiError;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.beans.factory.annotation.Qualifier;
