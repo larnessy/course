@@ -10,5 +10,8 @@
     <include file="classpath:changelog/2023/create-city-table-1.0.xml" />
     <include file="classpath:changelog/2023/create-weather_condition-table-1.0.xml" />
     <include file="classpath:changelog/2023/create-weather-table-1.0.xml" />
+    <include file="classpath:changelog/2023/create-roles-table-1.0.xml" />
+    <include file="classpath:changelog/2023/create-users-table-1.0.xml" />
+    <include file="classpath:changelog/2023/create-user_roles-table-1.0.xml" />
 
 </databaseChangeLog>
