@@ -7,10 +7,10 @@ import com.course.repository.jdbc.WeatherJdbcRepository;
 import com.course.service.crud.db.contract.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.dao.DuplicateKeyException;
 
 import java.util.Optional;
 
@@ -32,15 +32,15 @@ public class JdbcCityService implements CityService {
     }
 
     @Override
-    public void save(City city) {
+    public void insert(City city) {
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         transactionTemplate.execute(status -> {
             try {
-                if (city.getId() != 0) {
+                if (city.getId() != null) {
                     throw new IllegalArgumentException("The id must not be set for a new city");
                 }
 
-                cityJdbcRepository.save(city);
+                cityJdbcRepository.insert(city);
 
             } catch (DataAccessException ex) {
                 status.setRollbackOnly();
@@ -51,7 +51,7 @@ public class JdbcCityService implements CityService {
     }
 
     @Override
-    public Optional<City> getById(int id) {
+    public Optional<City> getById(Integer id) {
         return cityJdbcRepository.getById(id);
     }
 
@@ -71,7 +71,7 @@ public class JdbcCityService implements CityService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_SERIALIZABLE);
         transactionTemplate.execute(status -> {
             try {

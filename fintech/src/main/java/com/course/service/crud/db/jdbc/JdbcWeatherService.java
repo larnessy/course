@@ -37,39 +37,17 @@ public class JdbcWeatherService implements WeatherService {
     }
 
     @Override
-    public void save(WeatherEntity weatherEntity) {
+    public void insert(WeatherEntity weatherEntity) {
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
         transactionTemplate.execute(status -> {
             try {
-                if (weatherEntity.getId() != 0) {
+                if (weatherEntity.getId() != null) {
                     throw new IllegalArgumentException("The id must not be set for a new weather");
                 }
 
-                City city = weatherEntity.getCity();
-                WeatherCondition weatherCondition = weatherEntity.getWeatherCondition();
+                connectWeatherFieldsDataWithDb(weatherEntity);
 
-                if (city.getId() == 0) {
-                    City cityFromDb = cityJdbcRepository.findByName(city.getName()).orElse(null);
-
-                    if (cityFromDb == null) {
-                        cityJdbcRepository.save(city);
-                    } else {
-                        weatherEntity.setCity(cityFromDb);
-                    }
-                }
-
-                if (weatherCondition.getId() == 0) {
-                    WeatherCondition weatherConditionFromDb = weatherConditionJdbcRepository.
-                            findByName(weatherCondition.getName()).orElse(null);
-
-                    if (weatherConditionFromDb == null) {
-                        weatherConditionJdbcRepository.save(weatherCondition);
-                    } else {
-                        weatherEntity.setWeatherCondition(weatherConditionFromDb);
-                    }
-                }
-
-                weatherJdbcRepository.save(weatherEntity);
+                weatherJdbcRepository.insert(weatherEntity);
 
             } catch (DataAccessException ex) {
                 status.setRollbackOnly();
@@ -80,7 +58,7 @@ public class JdbcWeatherService implements WeatherService {
     }
 
     @Override
-    public Optional<WeatherEntity> getById(int id) {
+    public Optional<WeatherEntity> getById(Integer id) {
         return weatherJdbcRepository.getById(id);
     }
 
@@ -89,29 +67,7 @@ public class JdbcWeatherService implements WeatherService {
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
         transactionTemplate.execute(status -> {
             try {
-                City city = weatherEntity.getCity();
-                WeatherCondition weatherCondition = weatherEntity.getWeatherCondition();
-
-                if (city.getId() == 0) {
-                    City cityFromDb = cityJdbcRepository.findByName(city.getName()).orElse(null);
-
-                    if (cityFromDb == null) {
-                        cityJdbcRepository.save(city);
-                    } else {
-                        weatherEntity.setCity(cityFromDb);
-                    }
-                }
-
-                if (weatherCondition.getId() == 0) {
-                    WeatherCondition weatherConditionFromDb = weatherConditionJdbcRepository.
-                            findByName(weatherCondition.getName()).orElse(null);
-
-                    if (weatherConditionFromDb == null) {
-                        weatherConditionJdbcRepository.save(weatherCondition);
-                    } else {
-                        weatherEntity.setWeatherCondition(weatherConditionFromDb);
-                    }
-                }
+                connectWeatherFieldsDataWithDb(weatherEntity);
 
                 weatherJdbcRepository.update(weatherEntity);
 
@@ -123,8 +79,34 @@ public class JdbcWeatherService implements WeatherService {
         });
     }
 
+    private void connectWeatherFieldsDataWithDb(WeatherEntity weatherEntity) {
+        City city = weatherEntity.getCity();
+        WeatherCondition weatherCondition = weatherEntity.getWeatherCondition();
+
+        if (city.getId() == null) {
+            City cityFromDb = cityJdbcRepository.findByName(city.getName()).orElse(null);
+
+            if (cityFromDb == null) {
+                cityJdbcRepository.insert(city);
+            } else {
+                weatherEntity.setCity(cityFromDb);
+            }
+        }
+
+        if (weatherCondition.getId() == null) {
+            WeatherCondition weatherConditionFromDb = weatherConditionJdbcRepository.
+                    findByName(weatherCondition.getName()).orElse(null);
+
+            if (weatherConditionFromDb == null) {
+                weatherConditionJdbcRepository.insert(weatherCondition);
+            } else {
+                weatherEntity.setWeatherCondition(weatherConditionFromDb);
+            }
+        }
+    }
+
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         transactionTemplate.execute(status -> {
             try {

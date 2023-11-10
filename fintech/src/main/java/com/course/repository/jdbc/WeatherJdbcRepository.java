@@ -24,7 +24,7 @@ public class WeatherJdbcRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    public void save(WeatherEntity weatherEntity) {
+    public void insert(WeatherEntity weatherEntity) {
         String sql = "INSERT INTO weather (city_id, weather_condition_id, temperature, date_time) " +
                 "VALUES (:cityId, :weatherConditionId, :temperature, :dateTime)";
         Map<String, Object> params = new HashMap<>();

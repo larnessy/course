@@ -5,11 +5,11 @@ import com.course.model.entity.WeatherEntity;
 import java.util.Optional;
 
 public interface WeatherService {
-    void save(WeatherEntity weatherEntity);
+    void insert(WeatherEntity weatherEntity);
 
-    Optional<WeatherEntity> getById(int id);
+    Optional<WeatherEntity> getById(Integer id);
 
     void update(WeatherEntity weatherEntity);
 
-    void deleteById(int id);
+    void deleteById(Integer id);
 }

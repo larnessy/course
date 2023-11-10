@@ -57,27 +57,27 @@ public class WeatherRestClientController {
     @Operation(summary = "Save current weather by JDBC")
     @GetMapping("/jdbc/{cityName}")
     public void saveCurrentWeatherByJDBC(@PathVariable String cityName) {
-        jdbcWeatherService.save(getWeatherEntity(cityName));
+        jdbcWeatherService.insert(getWeatherEntity(cityName));
     }
 
     @Operation(summary = "Save current weather by JPA")
     @GetMapping("/jpa/{cityName}")
     public void saveCurrentWeatherByJPA(@PathVariable String cityName) {
-        jpaWeatherService.save(getWeatherEntity(cityName));
+        jpaWeatherService.insert(getWeatherEntity(cityName));
     }
 
     // for test
     @Operation(summary = "Save current city by JPA")
     @GetMapping("/city/jpa/{cityName}")
     public void saveCurrentCityByJPA(@PathVariable String cityName) {
-        jpaCityService.save(getWeatherEntity(cityName).getCity());
+        jpaCityService.insert(getWeatherEntity(cityName).getCity());
     }
 
     // for test
     @Operation(summary = "Save current city by JDBC")
     @GetMapping("/city/jdbc/{cityName}")
     public void saveCurrentCityByJDBC(@PathVariable String cityName) {
-        jdbcCityService.save(getWeatherEntity(cityName).getCity());
+        jdbcCityService.insert(getWeatherEntity(cityName).getCity());
     }
 
     public WeatherEntity getWeatherEntity(String cityName) {
