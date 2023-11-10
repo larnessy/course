@@ -4,13 +4,13 @@ import com.course.exception.myException.db.UnknownProblemWithDb;
 import com.course.model.entity.City;
 import com.course.repository.jpa.CityJpaRepository;
 import com.course.service.crud.db.contract.CityService;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Optional;
 
@@ -25,9 +25,9 @@ public class JpaCityService implements CityService {
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public void save(City city) {
+    public void insert(City city) {
         try {
-            if (city.getId() != 0) {
+            if (city.getId() != null) {
                 throw new IllegalArgumentException("The id must not be set for a new city");
             }
 
@@ -40,7 +40,7 @@ public class JpaCityService implements CityService {
     }
 
     @Override
-    public Optional<City> getById(int id) {
+    public Optional<City> getById(Integer id) {
         return cityJpaRepository.findById(id);
     }
 
@@ -58,7 +58,7 @@ public class JpaCityService implements CityService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         try {
             cityJpaRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {

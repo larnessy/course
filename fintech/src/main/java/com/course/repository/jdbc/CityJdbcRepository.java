@@ -24,7 +24,7 @@ public class CityJdbcRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    public void save(City city) {
+    public void insert(City city) {
         String sql = "INSERT INTO city (name) VALUES (:name)";
         Map<String, Object> params = new HashMap<>();
         params.put("name", city.getName());

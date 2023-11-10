@@ -6,11 +6,11 @@ import java.util.Optional;
 
 public interface CityService {
 
-    void save(City city);
+    void insert(City city);
 
-    Optional<City> getById(int id);
+    Optional<City> getById(Integer id);
 
     void update(City city);
 
-    void deleteById(int id);
+    void deleteById(Integer id);
 }
