@@ -10,12 +10,12 @@ import com.course.repository.jpa.WeatherJpaRepository;
 import com.course.service.crud.db.contract.WeatherService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Optional;
@@ -41,22 +41,22 @@ public class JpaWeatherService implements WeatherService {
 
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public void save(WeatherEntity weatherEntity) {
+    public void insert(WeatherEntity weatherEntity) {
         try {
-            if (weatherEntity.getId() != 0) {
+            if (weatherEntity.getId() != null) {
                 throw new IllegalArgumentException("The id must not be set for a new weather");
             }
 
             City city = weatherEntity.getCity();
             WeatherCondition weatherCondition = weatherEntity.getWeatherCondition();
 
-            if (city.getId() == 0) {
+            if (city.getId() == null) {
                 City cityFromDb = cityJpaRepository.findByName(city.getName());
                 city = cityFromDb == null ? city : cityFromDb;
                 weatherEntity.setCity(city);
             }
 
-            if (weatherCondition.getId() == 0) {
+            if (weatherCondition.getId() == null) {
                 WeatherCondition weatherConditionFromDb = weatherConditionJpaRepository.findByName(weatherCondition.getName());
                 weatherCondition = weatherConditionFromDb == null ? weatherCondition : weatherConditionFromDb;
                 weatherEntity.setWeatherCondition(weatherCondition);
@@ -79,7 +79,7 @@ public class JpaWeatherService implements WeatherService {
     }
 
     @Override
-    public Optional<WeatherEntity> getById(int id) {
+    public Optional<WeatherEntity> getById(Integer id) {
         return weatherJpaRepository.findById(id);
     }
 
@@ -90,13 +90,13 @@ public class JpaWeatherService implements WeatherService {
             City city = weatherEntity.getCity();
             WeatherCondition weatherCondition = weatherEntity.getWeatherCondition();
 
-            if (city.getId() == 0) {
+            if (city.getId() == null) {
                 City cityFromDb = cityJpaRepository.findByName(city.getName());
                 city = cityFromDb == null ? city : cityFromDb;
                 weatherEntity.setCity(city);
             }
 
-            if (weatherCondition.getId() == 0) {
+            if (weatherCondition.getId() == null) {
                 WeatherCondition weatherConditionFromDb = weatherConditionJpaRepository.findByName(weatherCondition.getName());
                 weatherCondition = weatherConditionFromDb == null ? weatherCondition : weatherConditionFromDb;
                 weatherEntity.setWeatherCondition(weatherCondition);
@@ -120,7 +120,7 @@ public class JpaWeatherService implements WeatherService {
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         try {
             weatherJpaRepository.deleteById(id);
 

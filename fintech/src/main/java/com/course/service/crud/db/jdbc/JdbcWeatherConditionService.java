@@ -30,15 +30,15 @@ public class JdbcWeatherConditionService implements WeatherConditionService {
     }
 
     @Override
-    public void save(WeatherCondition weatherCondition) {
+    public void insert(WeatherCondition weatherCondition) {
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         transactionTemplate.execute(status -> {
             try {
-                if (weatherCondition.getId() != 0) {
+                if (weatherCondition.getId() != null) {
                     throw new IllegalArgumentException("The id must not be set for a new weatherCondition");
                 }
 
-                weatherConditionJdbcRepository.save(weatherCondition);
+                weatherConditionJdbcRepository.insert(weatherCondition);
 
             } catch (DataAccessException ex) {
                 status.setRollbackOnly();
@@ -50,7 +50,7 @@ public class JdbcWeatherConditionService implements WeatherConditionService {
     }
 
     @Override
-    public Optional<WeatherCondition> getById(int id) {
+    public Optional<WeatherCondition> getById(Integer id) {
         return weatherConditionJdbcRepository.getById(id);
     }
 
@@ -69,7 +69,7 @@ public class JdbcWeatherConditionService implements WeatherConditionService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_SERIALIZABLE);
         transactionTemplate.execute(status -> {
             try {
