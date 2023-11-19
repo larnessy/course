@@ -1,5 +1,6 @@
 package com.course.config;
 
+import com.course.model.additional.DoubleLinkedList;
 import com.course.repository.CacheRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,6 @@ public class CacheConfig {
 
     @Bean
     public CacheRepository cacheRepository() {
-        return new CacheRepository(maxSize, maxIdleTimeInMinutes);
+        return new CacheRepository(maxSize, maxIdleTimeInMinutes, new DoubleLinkedList<>());
     }
 }

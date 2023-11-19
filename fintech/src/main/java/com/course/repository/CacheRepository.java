@@ -13,17 +13,18 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class CacheRepository {
 
-    private Map<String, DoubleLinkedNode<WeatherEntity>> cacheMap;
-    private DoubleLinkedList<WeatherEntity> doubleLinkedList;
+    private final Map<String, DoubleLinkedNode<WeatherEntity>> cacheMap;
+    private final DoubleLinkedList<WeatherEntity> doubleLinkedList;
     private final int maxSize;
     private final int maxIdleTimeInMinutes;
     private final Lock commonLock;
 
-    public CacheRepository(int maxSize, int maxIdleTimeInMinutes) {
+    public CacheRepository(int maxSize, int maxIdleTimeInMinutes,
+                           DoubleLinkedList<WeatherEntity> doubleLinkedList) {
         this.maxSize = maxSize;
         this.maxIdleTimeInMinutes = maxIdleTimeInMinutes;
         cacheMap = new HashMap<>(maxSize + 2, 1.0f);
-        doubleLinkedList = new DoubleLinkedList<>();
+        this.doubleLinkedList = doubleLinkedList;
         this.commonLock = new ReentrantLock();
     }
 
@@ -91,8 +92,8 @@ public class CacheRepository {
     }
 
     public void clear() {
-        cacheMap = new HashMap<>(maxSize + 2, 1.0f);
-        doubleLinkedList = new DoubleLinkedList<>();
+        cacheMap.clear();
+        doubleLinkedList.clear();
         System.gc();
     }
 }

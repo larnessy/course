@@ -1,8 +1,8 @@
 package com.course.model.additional;
 
 public class DoubleLinkedList<V> {
-    private final DoubleLinkedNode<V> head;
-    private final DoubleLinkedNode<V> tail;
+    private DoubleLinkedNode<V> head;
+    private DoubleLinkedNode<V> tail;
 
     public DoubleLinkedList() {
         head = new DoubleLinkedNode<>();
@@ -36,5 +36,20 @@ public class DoubleLinkedList<V> {
         DoubleLinkedNode<V> res = tail.getPre();
         removeNode(res);
         return res;
+    }
+
+    public V getHeadValue() {
+        return head.getPost().getValue();
+    }
+
+    public V getTailValue() {
+        return tail.getPre().getValue();
+    }
+
+    public void clear(){
+        head = new DoubleLinkedNode<>();
+        tail = new DoubleLinkedNode<>();
+        head.setPost(tail);
+        tail.setPre(head);
     }
 }
