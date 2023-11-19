@@ -47,11 +47,11 @@ class CityJdbcRepositoryTest {
         int oldCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM city", Integer.class);
         City city = new City("Tomsk");
 
-        cityJdbcRepository.save(city);
+        cityJdbcRepository.insert(city);
         int actuallyCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM city", Integer.class);
 
-        verify(cityJdbcRepository, times(1)).save(city);
-        verify(cityJdbcRepository, times(1)).save(any(City.class));
+        verify(cityJdbcRepository, times(1)).insert(city);
+        verify(cityJdbcRepository, times(1)).insert(any(City.class));
         assertEquals(oldCount + 1, actuallyCount);
         assertNotEquals(city.getId(), 0);
     }
@@ -61,11 +61,11 @@ class CityJdbcRepositoryTest {
         int oldCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM city", Integer.class);
         City city = new City(1, "London");
 
-        assertThrows(DataAccessException.class, () -> cityJdbcRepository.save(city));
+        assertThrows(DataAccessException.class, () -> cityJdbcRepository.insert(city));
         int actuallyCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM city", Integer.class);
 
-        verify(cityJdbcRepository, times(1)).save(city);
-        verify(cityJdbcRepository, times(1)).save(any(City.class));
+        verify(cityJdbcRepository, times(1)).insert(city);
+        verify(cityJdbcRepository, times(1)).insert(any(City.class));
         assertEquals(oldCount, actuallyCount);
     }
 

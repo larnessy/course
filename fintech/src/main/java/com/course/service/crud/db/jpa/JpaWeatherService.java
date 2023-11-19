@@ -83,6 +83,10 @@ public class JpaWeatherService implements WeatherService {
         return weatherJpaRepository.findById(id);
     }
 
+    public Optional<WeatherEntity> findTopByCityNameOrderByDateTimeDesc(String cityName) {
+        return weatherJpaRepository.findTopByCityNameOrderByDateTimeDesc(cityName);
+    }
+
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void update(WeatherEntity weatherEntity) {

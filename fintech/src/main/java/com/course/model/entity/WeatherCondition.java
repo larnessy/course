@@ -11,10 +11,10 @@ import java.util.List;
 @Table(name = "weather_condition")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "weatherEntities")
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "weatherEntities")
 public class WeatherCondition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

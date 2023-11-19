@@ -4,10 +4,9 @@ import com.course.model.entity.City;
 import com.course.repository.jpa.CityJpaRepository;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 // for using Stub
 
@@ -20,7 +19,7 @@ class JpaCityServiceTest {
 
         City city = new City("New York");
 
-        assertEquals(0, city.getId());
+        assertNull(city.getId());
 
         when(cityJpaRepository.save(any(City.class))).thenAnswer(invocation -> {
             City savedCity = invocation.getArgument(0);
@@ -28,7 +27,7 @@ class JpaCityServiceTest {
             return savedCity;
         });
 
-        cityService.save(city);
+        cityService.insert(city);
 
         assertEquals(1, city.getId());
     }

@@ -10,10 +10,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "weatherEntities")
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "weatherEntities")
 public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
