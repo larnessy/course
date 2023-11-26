@@ -1,11 +1,11 @@
-package com.course.exception;
+package com.course.exception.myApiException;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class MyApiException extends RuntimeException {
+public class MainExceptionForExternalApi extends RuntimeException {
 
     private final int errorCode ;
 }

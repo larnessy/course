@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-user_roles-table-1.0" author="Vladislav">
+        <preConditions onFail="MARK_RAN" onError="WARN">
+            <not>
+                <tableExists tableName="user_roles"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT" remarks="ID of user">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="role_id" type="BIGINT" remarks="ID of role">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="user_roles"
+                baseColumnNames="user_id"
+                constraintName="FK_user_roles_user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+        />
+
+        <addForeignKeyConstraint
+                baseTableName="user_roles"
+                baseColumnNames="role_id"
+                constraintName="FK_user_roles_role_id"
+                referencedTableName="roles"
+                referencedColumnNames="id"
+        />
+    </changeSet>
+
+    <changeSet id="addUsersAndRoles" author="Vladislav">
+        <preConditions onFail="MARK_RAN" onError="WARN">
+            <tableExists tableName="user_roles"/>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM user_roles</sqlCheck>
+        </preConditions>
+
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

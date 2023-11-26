@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-users-table-1.0" author="Vladislav">
+
+        <preConditions onFail="MARK_RAN" onError="WARN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true" remarks="Id of user">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(200)" remarks="Name of user">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="password" type="VARCHAR(255)" remarks="Password of user">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="users" indexName="idx_user_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="addUsers" author="Vladislav">
+        <preConditions onFail="MARK_RAN" onError="WARN">
+            <tableExists tableName="users"/>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM users</sqlCheck>
+        </preConditions>
+
+        <insert tableName="users">
+            <column name="name" value="admincheg"/>
+            <column name="password" value="$2a$12$vBQ/1EjuJWgYQ0GYmYio8.EaKT/oCrciJRypUZRBlQK5OBd2GRhzC"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>
