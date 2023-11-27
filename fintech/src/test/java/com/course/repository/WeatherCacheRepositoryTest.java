@@ -12,20 +12,20 @@ import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 
-class CacheRepositoryTest {
+class WeatherCacheRepositoryTest {
 
-    static CacheRepository cacheRepository;
+    static WeatherCacheRepository weatherCacheRepository;
     static DoubleLinkedList<WeatherEntity> doubleLinkedList;
 
     @BeforeAll
     public static void initialize(){
         doubleLinkedList = new DoubleLinkedList<>();
-        cacheRepository = new CacheRepository(3, 10, doubleLinkedList);
+        weatherCacheRepository = new WeatherCacheRepository(3, 10, doubleLinkedList);
     }
 
     @AfterEach
     public void clear(){
-        cacheRepository.clear();
+        weatherCacheRepository.clear();
     }
 
     @Test
@@ -36,13 +36,13 @@ class CacheRepositoryTest {
                 new WeatherCondition(), 1, LocalDateTime.now());
         WeatherEntity weather3 = new WeatherEntity(new City("3"),
                 new WeatherCondition(), 1, LocalDateTime.now());
-        cacheRepository.add(weather1);
-        cacheRepository.add(weather2);
-        cacheRepository.add(weather3);
+        weatherCacheRepository.add(weather1);
+        weatherCacheRepository.add(weather2);
+        weatherCacheRepository.add(weather3);
 
         WeatherEntity headBefore = doubleLinkedList.getHeadValue();
         WeatherEntity tailBefore = doubleLinkedList.getTailValue();
-        cacheRepository.get(weather1.getCity().getName());
+        weatherCacheRepository.get(weather1.getCity().getName());
         WeatherEntity headAfter = doubleLinkedList.getHeadValue();
         WeatherEntity tailAfter = doubleLinkedList.getTailValue();
 
@@ -62,18 +62,18 @@ class CacheRepositoryTest {
                 new WeatherCondition(), 1, LocalDateTime.now());
         WeatherEntity weather4 = new WeatherEntity(new City("4"),
                 new WeatherCondition(), 1, LocalDateTime.now());
-        cacheRepository.add(weather1);
-        cacheRepository.add(weather2);
-        cacheRepository.add(weather3);
-        int oldSize = cacheRepository.size();
+        weatherCacheRepository.add(weather1);
+        weatherCacheRepository.add(weather2);
+        weatherCacheRepository.add(weather3);
+        int oldSize = weatherCacheRepository.size();
 
         WeatherEntity headBefore = doubleLinkedList.getHeadValue();
         WeatherEntity tailBefore = doubleLinkedList.getTailValue();
-        cacheRepository.add(weather4);
+        weatherCacheRepository.add(weather4);
         WeatherEntity headAfter = doubleLinkedList.getHeadValue();
         WeatherEntity tailAfter = doubleLinkedList.getTailValue();
 
-        assertEquals(oldSize, cacheRepository.size());
+        assertEquals(oldSize, weatherCacheRepository.size());
         assertEquals(headBefore.getCity().getName(), weather3.getCity().getName());
         assertEquals(headAfter.getCity().getName(), weather4.getCity().getName());
         assertEquals(tailBefore.getCity().getName(), weather1.getCity().getName());

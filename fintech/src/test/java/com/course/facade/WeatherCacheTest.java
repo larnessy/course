@@ -3,7 +3,7 @@ package com.course.facade;
 import com.course.model.entity.City;
 import com.course.model.entity.WeatherCondition;
 import com.course.model.entity.WeatherEntity;
-import com.course.repository.CacheRepository;
+import com.course.repository.WeatherCacheRepository;
 import com.course.service.crud.db.jpa.JpaWeatherService;
 import com.course.service.myRestClient.WeatherRestClient;
 import jakarta.transaction.Transactional;
@@ -25,7 +25,7 @@ class WeatherCacheTest {
     private WeatherCache weatherCache;
 
     @SpyBean
-    private CacheRepository cacheRepository;
+    private WeatherCacheRepository weatherCacheRepository;
 
     @SpyBean
     private JpaWeatherService jpaWeatherService;
@@ -35,7 +35,7 @@ class WeatherCacheTest {
 
     @AfterEach
     public void clear(){
-        cacheRepository.clear();
+        weatherCacheRepository.clear();
     }
 
     @Test
@@ -43,15 +43,15 @@ class WeatherCacheTest {
         String cityName = "Chelyabinsk";
         WeatherEntity weatherEntity = new WeatherEntity(new City(cityName),
                 new WeatherCondition(), 20, LocalDateTime.now());
-        cacheRepository.add(weatherEntity);
+        weatherCacheRepository.add(weatherEntity);
         weatherEntity.setDateTime(LocalDateTime.now().minusMinutes(20));
-        int countBefore = cacheRepository.size();
+        int countBefore = weatherCacheRepository.size();
 
         WeatherEntity result = weatherCache.get(cityName);
 
         assertNotNull(result);
         assertNotEquals(result.getDateTime(), weatherEntity.getDateTime());
-        assertEquals(countBefore, cacheRepository.size());
+        assertEquals(countBefore, weatherCacheRepository.size());
         verify(jpaWeatherService, times(1)).findTopByCityNameOrderByDateTimeDesc(cityName);
         verify(jpaWeatherService, times(1)).insert(any());
         verify(weatherRestClient, times(1)).getCurrentWeather(any());
@@ -59,7 +59,7 @@ class WeatherCacheTest {
 
     @Test
     void testGet_cacheHit_thereWereNoCallsMethodsExceptCacheMethods() {
-        cacheRepository.add(new WeatherEntity(new City("ExistingCity"),
+        weatherCacheRepository.add(new WeatherEntity(new City("ExistingCity"),
                 new WeatherCondition(), 20, LocalDateTime.now()));
         String cityName = "ExistingCity";
 
@@ -75,15 +75,15 @@ class WeatherCacheTest {
     @Test
     void testGet_cacheMissAndDatabaseMiss_clientCallAndAddValueToDatabaseAndCache() {
         String cityName = "Chelyabinsk";
-        int countBefore = cacheRepository.size();
+        int countBefore = weatherCacheRepository.size();
 
         WeatherEntity weatherEntity = weatherCache.get(cityName);
 
         assertNotNull(weatherEntity);
-        assertEquals(countBefore + 1, cacheRepository.size());
+        assertEquals(countBefore + 1, weatherCacheRepository.size());
         verify(jpaWeatherService, times(1)).findTopByCityNameOrderByDateTimeDesc(cityName);
         verify(jpaWeatherService, times(1)).insert(any());
         verify(weatherRestClient, times(1)).getCurrentWeather(any());
-        verify(cacheRepository, atLeast(1)).add(any());
+        verify(weatherCacheRepository, atLeast(1)).add(any());
     }
 }

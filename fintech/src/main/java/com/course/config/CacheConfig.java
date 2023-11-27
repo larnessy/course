@@ -1,22 +1,24 @@
 package com.course.config;
 
 import com.course.model.additional.DoubleLinkedList;
-import com.course.repository.CacheRepository;
-import org.springframework.beans.factory.annotation.Value;
+import com.course.repository.WeatherCacheRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CacheConfig {
 
-    @Value("${cache.course.size}")
-    private int maxSize;
+    private final CacheProperties cacheProperties;
 
-    @Value("${cache.course.maxIdleTimeInMinutes}")
-    private int maxIdleTimeInMinutes;
+    @Autowired
+    public CacheConfig(CacheProperties cacheProperties) {
+        this.cacheProperties = cacheProperties;
+    }
 
     @Bean
-    public CacheRepository cacheRepository() {
-        return new CacheRepository(maxSize, maxIdleTimeInMinutes, new DoubleLinkedList<>());
+    public WeatherCacheRepository cacheRepository() {
+        return new WeatherCacheRepository(cacheProperties.getSize(),
+                cacheProperties.getMaxIdleTimeInMinutes(), new DoubleLinkedList<>());
     }
 }

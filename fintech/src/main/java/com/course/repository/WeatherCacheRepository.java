@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class CacheRepository {
+public class WeatherCacheRepository {
 
     private final Map<String, DoubleLinkedNode<WeatherEntity>> cacheMap;
     private final DoubleLinkedList<WeatherEntity> doubleLinkedList;
@@ -19,8 +19,8 @@ public class CacheRepository {
     private final int maxIdleTimeInMinutes;
     private final Lock commonLock;
 
-    public CacheRepository(int maxSize, int maxIdleTimeInMinutes,
-                           DoubleLinkedList<WeatherEntity> doubleLinkedList) {
+    public WeatherCacheRepository(int maxSize, int maxIdleTimeInMinutes,
+                                  DoubleLinkedList<WeatherEntity> doubleLinkedList) {
         this.maxSize = maxSize;
         this.maxIdleTimeInMinutes = maxIdleTimeInMinutes;
         cacheMap = new HashMap<>(maxSize + 2, 1.0f);
@@ -49,7 +49,7 @@ public class CacheRepository {
         }
     }
 
-    public boolean add(WeatherEntity weatherEntity) throws NullPointerException {
+    public boolean add(WeatherEntity weatherEntity) {
         if (isExpired(weatherEntity.getDateTime())) {
             return false;
         }
