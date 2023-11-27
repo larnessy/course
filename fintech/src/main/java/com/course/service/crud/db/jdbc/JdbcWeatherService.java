@@ -49,9 +49,13 @@ public class JdbcWeatherService implements WeatherService {
 
                 weatherJdbcRepository.insert(weatherEntity);
 
-            } catch (DataAccessException ex) {
+            } catch (DuplicateKeyException e) {
                 status.setRollbackOnly();
                 throw new IllegalArgumentException("A weather with the same name have been already in the database");
+            }
+            catch (DataAccessException ex) {
+                status.setRollbackOnly();
+                throw new UnknownProblemWithDb("Failed to insert weather in database");
             }
             return null;
         });

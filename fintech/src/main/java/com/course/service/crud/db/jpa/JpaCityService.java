@@ -10,7 +10,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Optional;
 
@@ -33,9 +32,10 @@ public class JpaCityService implements CityService {
 
             cityJpaRepository.save(city);
 
-        } catch (DataAccessException ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        } catch (DataIntegrityViolationException e) {
             throw new IllegalArgumentException("A city with the same name have been already in the database");
+        } catch (DataAccessException ex) {
+            throw new UnknownProblemWithDb("Failed to insert city in database");
         }
     }
 
@@ -44,14 +44,13 @@ public class JpaCityService implements CityService {
         return cityJpaRepository.findById(id);
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = DataAccessException.class)
     @Override
     public void update(City city) {
         try {
             cityJpaRepository.save(city);
 
         } catch (DataAccessException ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new UnknownProblemWithDb("Failed to update city in database");
         }
     }
@@ -62,9 +61,8 @@ public class JpaCityService implements CityService {
         try {
             cityJpaRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            // ignore
         } catch (DataAccessException ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new UnknownProblemWithDb("Failed to delete city from database");
         }
     }

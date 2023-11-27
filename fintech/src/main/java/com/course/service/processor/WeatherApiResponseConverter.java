@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
-public class Converter {
+public class WeatherApiResponseConverter {
     public WeatherEntity mapWeatherApiResponseToWeatherEntity(WeatherApiResponse weatherApiResponse) {
         Current current= weatherApiResponse.getCurrent();
         Location location = weatherApiResponse.getLocation();
