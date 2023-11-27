@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+
+</head>
+<body>
+<section>
+
+    <div class="container p-3">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header text-center fs-4">Sign Up</div>
+
+                    <th:block th:if="${msg}">
+                        <p class="text-center fs-4 text-success" th:text="${msg}"></p>
+                    </th:block>
+
+                    <div class="card-body">
+                        <form action="createUser" th:object="${user}" method="post">
+                            <div class="mb-3">
+                                <label>
+                                    Username <input type="text" name="username" class="form-control">
+                                </label>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>
+                                    Password <input type="text" name="password" class="form-control">
+                                </label>
+                            </div>
+
+                            <button class="btn btn-primary col-md-12">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+</body>
+</html>

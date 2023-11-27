@@ -4,11 +4,11 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public abstract class MyException extends RuntimeException {
+public abstract class MainExceptionForGlobalHandler extends RuntimeException {
     HttpStatus httpStatus;
     String message;
 
-    public MyException(HttpStatus httpStatus, String message) {
+    public MainExceptionForGlobalHandler(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
         this.message = message;
     }
