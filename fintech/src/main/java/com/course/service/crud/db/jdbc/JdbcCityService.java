@@ -42,9 +42,10 @@ public class JdbcCityService implements CityService {
 
                 cityJdbcRepository.insert(city);
 
-            } catch (DataAccessException ex) {
-                status.setRollbackOnly();
+            } catch (DuplicateKeyException e) {
                 throw new IllegalArgumentException("A city with the same name have been already in the database");
+            } catch (DataAccessException ex) {
+                throw new UnknownProblemWithDb("Failed to insert city in database");
             }
             return null;
         });
@@ -62,7 +63,7 @@ public class JdbcCityService implements CityService {
             try {
                 cityJdbcRepository.update(city);
 
-            }  catch (DataAccessException ex) {
+            } catch (DataAccessException ex) {
                 status.setRollbackOnly();
                 throw new UnknownProblemWithDb("Failed to update city in database");
             }
@@ -80,9 +81,8 @@ public class JdbcCityService implements CityService {
                 cityJdbcRepository.deleteById(id);
 
             } catch (DuplicateKeyException e) {
-                status.setRollbackOnly();
+                // ignore
             } catch (DataAccessException ex) {
-                status.setRollbackOnly();
                 throw new UnknownProblemWithDb("Failed to delete city from database");
             }
             return null;

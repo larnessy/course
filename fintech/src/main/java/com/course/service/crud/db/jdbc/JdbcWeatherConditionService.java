@@ -40,10 +40,11 @@ public class JdbcWeatherConditionService implements WeatherConditionService {
 
                 weatherConditionJdbcRepository.insert(weatherCondition);
 
-            } catch (DataAccessException ex) {
-                status.setRollbackOnly();
+            } catch (DuplicateKeyException e) {
                 throw new IllegalArgumentException("A weatherCondition with the same "
                         + "name have been already in the database");
+            } catch (DataAccessException ex) {
+                throw new UnknownProblemWithDb("Failed to insert weatherCondition in database");
             }
             return null;
         });
@@ -78,9 +79,8 @@ public class JdbcWeatherConditionService implements WeatherConditionService {
                 weatherConditionJdbcRepository.deleteById(id);
 
             } catch (DuplicateKeyException e) {
-                status.setRollbackOnly();
+                // ignore
             } catch (DataAccessException ex) {
-                status.setRollbackOnly();
                 throw new UnknownProblemWithDb("Failed to delete weatherCondition from database");
             }
             return null;

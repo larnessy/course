@@ -10,14 +10,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Optional;
 
 @Service
 public class JpaWeatherConditionService implements WeatherConditionService {
 
-    private WeatherConditionJpaRepository weatherConditionJpaRepository;
+    private final WeatherConditionJpaRepository weatherConditionJpaRepository;
 
     @Autowired
     public JpaWeatherConditionService(WeatherConditionJpaRepository weatherConditionJpaRepository) {
@@ -34,10 +33,11 @@ public class JpaWeatherConditionService implements WeatherConditionService {
 
             weatherConditionJpaRepository.save(weatherCondition);
 
-        } catch (DataAccessException ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        } catch (DataIntegrityViolationException e) {
             throw new IllegalArgumentException("A weatherCondition with the same "
                     + "name have been already in the database");
+        } catch (DataAccessException ex) {
+            throw new UnknownProblemWithDb("Failed to insert weatherCondition in database");
         }
     }
 
@@ -46,14 +46,13 @@ public class JpaWeatherConditionService implements WeatherConditionService {
         return weatherConditionJpaRepository.findById(id);
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = DataAccessException.class)
     @Override
     public void update(WeatherCondition weatherCondition) {
         try {
             weatherConditionJpaRepository.save(weatherCondition);
 
         } catch (DataAccessException ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new UnknownProblemWithDb("Failed to update weatherCondition in database");
         }
     }
@@ -63,12 +62,10 @@ public class JpaWeatherConditionService implements WeatherConditionService {
     public void deleteById(Integer id) {
         try {
             weatherConditionJpaRepository.deleteById(id);
-            ;
 
         } catch (DataIntegrityViolationException e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            // ignore
         } catch (DataAccessException ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new UnknownProblemWithDb("Failed to delete weatherCondition from database");
         }
     }

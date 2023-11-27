@@ -8,7 +8,7 @@ import com.course.service.crud.db.jdbc.JdbcWeatherService;
 import com.course.service.crud.db.jpa.JpaCityService;
 import com.course.service.crud.db.jpa.JpaWeatherService;
 import com.course.service.myRestClient.WeatherRestClient;
-import com.course.service.processor.Converter;
+import com.course.service.processor.WeatherApiResponseConverter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class WeatherRestClientController {
     private final WeatherRestClient myRestClient;
     private final JpaWeatherService jpaWeatherService;
     private final JdbcWeatherService jdbcWeatherService;
-    private final Converter converter;
+    private final WeatherApiResponseConverter weatherApiResponseConverter;
     private final JpaCityService jpaCityService;
     private final JdbcCityService jdbcCityService;
 
@@ -38,11 +38,11 @@ public class WeatherRestClientController {
                                        JpaCityService jpaCityService,
                                        JdbcCityService jdbcCityService,
 
-                                       Converter converter) {
+                                       WeatherApiResponseConverter weatherApiResponseConverter) {
         this.myRestClient = myRestClient;
         this.jpaWeatherService = jpaWeatherService;
         this.jdbcWeatherService = jdbcWeatherService;
-        this.converter = converter;
+        this.weatherApiResponseConverter = weatherApiResponseConverter;
 
         this.jpaCityService = jpaCityService;
         this.jdbcCityService = jdbcCityService;
@@ -85,7 +85,7 @@ public class WeatherRestClientController {
         if(weatherApiResponse == null) {
             throw new UnknownProblemWithResponse("Failed to get weather");
         }
-        return converter.mapWeatherApiResponseToWeatherEntity(weatherApiResponse);
+        return weatherApiResponseConverter.mapWeatherApiResponseToWeatherEntity(weatherApiResponse);
     }
 
 }

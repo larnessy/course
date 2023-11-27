@@ -16,7 +16,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Optional;
 
@@ -26,9 +25,9 @@ public class JpaWeatherService implements WeatherService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private WeatherJpaRepository weatherJpaRepository;
-    private CityJpaRepository cityJpaRepository;
-    private WeatherConditionJpaRepository weatherConditionJpaRepository;
+    private final WeatherJpaRepository weatherJpaRepository;
+    private final CityJpaRepository cityJpaRepository;
+    private final WeatherConditionJpaRepository weatherConditionJpaRepository;
 
     @Autowired
     public JpaWeatherService(WeatherJpaRepository weatherJpaRepository,
@@ -40,7 +39,7 @@ public class JpaWeatherService implements WeatherService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = DataAccessException.class)
     public void insert(WeatherEntity weatherEntity) {
         try {
             if (weatherEntity.getId() != null) {
@@ -72,9 +71,10 @@ public class JpaWeatherService implements WeatherService {
 
             weatherJpaRepository.save(weatherEntity);
 
-        } catch (DataAccessException ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            throw new UnknownProblemWithDb("Failed to add weather to database");
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("A weather with the same name have been already in the database");
+        }  catch (DataAccessException ex) {
+            throw new UnknownProblemWithDb("Failed to insert weather to database");
         }
     }
 
@@ -84,7 +84,7 @@ public class JpaWeatherService implements WeatherService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = DataAccessException.class)
     public void update(WeatherEntity weatherEntity) {
         try {
             City city = weatherEntity.getCity();
@@ -113,21 +113,19 @@ public class JpaWeatherService implements WeatherService {
             weatherJpaRepository.save(weatherEntity);
 
         } catch (DataAccessException ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new UnknownProblemWithDb("Failed to update weather in database");
         }
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = DataAccessException.class)
     @Override
     public void deleteById(Integer id) {
         try {
             weatherJpaRepository.deleteById(id);
 
         } catch (DataIntegrityViolationException e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            // ignore
         } catch (DataAccessException ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new UnknownProblemWithDb("Failed to delete weather from database");
         }
     }
