@@ -1,21 +1,19 @@
 package com.course.security;
 
-import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
-public class AnonymousResourcesAccessTest {
+public class AnonymousResourcesAccessTest extends SecurityTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,7 +35,8 @@ public class AnonymousResourcesAccessTest {
     @Test
     @WithMockUser(username = "userok", password = "I'mUserI'motBear", roles = "USER")
     public void testAnonymousResourceAccess_failed_byUserAuthorization() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/register"))
-                .andExpect(status().is4xxClientError());
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/register"))
+                .andExpect(status().is4xxClientError()).andReturn();
+        Assertions.assertNull(result.getResolvedException());
     }
 }
