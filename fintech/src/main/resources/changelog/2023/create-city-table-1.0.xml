@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-city-table-1.0" author="Vladislav">
+
+        <preConditions onFail="MARK_RAN" onError="WARN">
+            <not>
+                <tableExists tableName="city"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="city">
+            <column name="id" type="INT" autoIncrement="true" remarks="Id of city">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(200)" remarks="Name of city">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="city" indexName="idx_city_name">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="addCities" author="Vladislav">
+        <preConditions onFail="MARK_RAN" onError="WARN">
+            <tableExists tableName="city"/>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM city</sqlCheck>
+        </preConditions>
+
+        <insert tableName="city">
+            <column name="name" value="New York"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Los Angeles"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Chicago"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="Moscow"/>
+        </insert>
+        <insert tableName="city">
+            <column name="name" value="London"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,4 +1,4 @@
-package com.course.repositorie;
+package com.course.repository;
 
 import com.course.model.Weather;
 
